@@ -1,0 +1,114 @@
+<footer class="footer">
+  <div class="width">
+    <div class="footer-top">
+      {% for block in section.blocks %}
+        {% if block.type == 'navigation' %}
+          <div class="footer-column footer-column--nav">
+            <h2>{{ block.settings.linklist.title }}</h2>
+            {% for link in block.settings.linklist.links %}
+              <li>
+                <a href="{{ link.url }}">{{ link.title }}</a>
+              </li>
+            {% endfor %}
+          </div>
+        {% elsif block.type == 'newsletter' %}
+          <div class="footer-column footer-column--news">
+            <h2>{{ block.settings.heading }}</h2>
+            {{ block.settings.text }}
+
+            {% form 'customer', id: 'footer-newsletter' %}
+              {% if form.posted_successfully? %}
+                <p class="footer-column-news-message">You've been subscribed!</p>
+              {% endif %}
+
+              {% if form.errors %}
+                <p class="footer-column-news-message">{{ form.errors.messages.email }}</p>
+              {% endif %}
+
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              <input name="contact[email]" type="email" placeholder="Email address">
+              <button type="submit">Subscribe</button>
+            {% endform %}
+          </div>
+        {% elsif block.type == 'text' %}
+          <div class="footer-column footer-column--text">
+            <h2>{{ block.settings.heading }}</h2>
+            {{ block.settings.text }}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-copyright">{{ section.settings.copyright }}</p>
+
+      <ul class="footer-cards">
+        <li>{% render 'icon-visa' %}</li>
+        <li>{% render 'icon-visa' %}</li>
+        <li>{% render 'icon-visa' %}</li>
+        <li>{% render 'icon-visa' %}</li>
+        <li>{% render 'icon-visa' %}</li>
+        <li>{% render 'icon-visa' %}</li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "id": "copyright",
+      "label": "Copyright text",
+      "type": "text"
+    }
+  ],
+  "max_blocks": 5,
+  "blocks": [
+    {
+      "type": "newsletter",
+      "name": "Newsletter",
+      "settings": [
+        {
+          "id": "heading",
+          "type": "text",
+          "label": "Heading text"
+        },
+        {
+          "id": "text",
+          "type": "richtext",
+          "label": "Body text"
+        }
+      ]
+    },
+    {
+      "name": "Text",
+      "type": "text",
+      "settings": [
+        {
+          "id": "heading",
+          "type": "text",
+          "label": "Heading text"
+        },
+        {
+          "id": "text",
+          "type": "richtext",
+          "label": "Body text"
+        }
+      ]
+    },
+    {
+      "name": "Navigation column",
+      "type": "navigation",
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "linklist",
+          "label": "Navigation menu"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
